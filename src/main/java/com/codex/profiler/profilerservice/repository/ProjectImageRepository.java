@@ -14,7 +14,7 @@ public interface ProjectImageRepository extends JpaRepository<ProjectImage, Long
 
     @Modifying
     @Query("delete from ProjectImage p where p.idProject in (:idProjects)")
-    int deleteByIdProject(List<Long> idProjects);
+    int deleteByIdProjects(List<Long> idProjects);
 
     @Query("select p from ProjectImage p where p.idProject = :idProject")
     List<ProjectImage> getProjectImageByIdProject(long idProject);

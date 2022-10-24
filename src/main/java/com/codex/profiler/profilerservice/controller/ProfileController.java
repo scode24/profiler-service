@@ -39,7 +39,14 @@ public class ProfileController {
     @PostMapping("/saveOrUpdateProfileImage")
     public ResponseEntity<ResponseModel> saveOrUpdateProfileImage(@RequestParam String email, @RequestParam("image") MultipartFile imageFile) throws IOException {
         profileManageService.saveOrUpdateCandidateImage(email, imageFile.getBytes());
-        return new ResponseEntity<>(new ResponseModel("Profile data saved/ updated", null), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseModel("Profile image saved/ updated", null), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Save/update project image", notes = "Project image save/ update information")
+    @PostMapping("/saveOrUpdateProjectImage")
+    public ResponseEntity<ResponseModel> saveOrUpdateProjectImage(@RequestParam String email, @RequestParam("idProject") long idProject, @RequestParam("image") MultipartFile imageFile) throws IOException {
+        profileManageService.saveOrUpdateProjectImage(email, idProject, imageFile.getBytes());
+        return new ResponseEntity<>(new ResponseModel("Project image saved/ updated", null), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get about candidate by email id", notes = "Returns about candidate")

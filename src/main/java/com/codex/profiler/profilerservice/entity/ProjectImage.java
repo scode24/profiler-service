@@ -20,4 +20,8 @@ public class ProjectImage {
     @Lob
     private byte[] image;
 
+    public ProjectImage(long idProject, byte[] image) {
+        this.idProject = idProject;
+        this.image = image;
+    }
 }

@@ -61,8 +61,12 @@ public class ProfileManageService {
         candidateRepository.save(candidate);
     }
 
-    public List<String> processProfile(ProfileInfoModel profileInfoModel, String email) {
+    public void saveOrUpdateProjectImage(String email, long idProject, byte[] image) {
+        projectImageRepository.save(new ProjectImage(idProject, image));
+    }
 
+
+    public List<String> processProfile(ProfileInfoModel profileInfoModel, String email) {
         Candidate candidate = profileRepository.findByEmail(email);
         saveOrUpdateAboutCandidate(candidate.getId(), profileInfoModel.getAbout());
         saveOrUpdateAchievements(candidate.getId(), profileInfoModel.getAchievements());
@@ -238,7 +242,7 @@ public class ProfileManageService {
             case PROJECT:
                 List<Long> idProjects = projectRepository.getProjectIdsByIdCandidate(idCandidate);
                 projectRepository.deleteByIdCandidate(idCandidate);
-                projectImageRepository.deleteByIdProject(idProjects);
+                projectImageRepository.deleteByIdProjects(idProjects);
                 break;
             case QUALIFICATION:
                 qualificationRepository.deleteByIdCandidate(idCandidate);
