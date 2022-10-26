@@ -68,14 +68,14 @@ public class ProfileManageService {
 
     public List<String> processProfile(ProfileInfoModel profileInfoModel, String email) {
         Candidate candidate = profileRepository.findByEmail(email);
-        saveOrUpdateAboutCandidate(candidate.getId(), profileInfoModel.getAbout());
-        saveOrUpdateAchievements(candidate.getId(), profileInfoModel.getAchievements());
+        saveOrUpdateAboutCandidate(candidate.getId(), profileInfoModel.getAbout(), 1);
+        saveOrUpdateAchievements(candidate.getId(), profileInfoModel.getAchievements(), 4);
         saveOrUpdateContacts(candidate.getId(), profileInfoModel.getContacts());
-        saveOrUpdateSkills(candidate.getId(), profileInfoModel.getSkills());
-        saveOrUpdateQualification(candidate.getId(), profileInfoModel.getQualification());
-        saveOrUpdateWorkingExps(candidate.getId(), profileInfoModel.getWorkingExperiences());
+        saveOrUpdateSkills(candidate.getId(), profileInfoModel.getSkills(), 2);
+        saveOrUpdateQualification(candidate.getId(), profileInfoModel.getQualification(), 6);
+        saveOrUpdateWorkingExps(candidate.getId(), profileInfoModel.getWorkingExperiences(), 5);
         saveOrUpdateLink(candidate.getId(), profileInfoModel.getLinks());
-        List<String> projectInfo = saveOrUpdateProjects(candidate.getId(), profileInfoModel.getProjects());
+        List<String> projectInfo = saveOrUpdateProjects(candidate.getId(), profileInfoModel.getProjects(), 3);
 
         return projectInfo;
     }
@@ -91,7 +91,7 @@ public class ProfileManageService {
         }
     }
 
-    private void saveOrUpdateWorkingExps(long idCandidate, List<WorkingExp> workingExperiences) {
+    private void saveOrUpdateWorkingExps(long idCandidate, List<WorkingExp> workingExperiences, int menuOrder) {
         deleteCandidateData(idCandidate, WORKING_EXP);
 
         if (workingExperiences != null && !workingExperiences.isEmpty()) {
@@ -99,11 +99,11 @@ public class ProfileManageService {
                 workingExp.setIdCandidate(idCandidate);
             }
             workingExpRepository.saveAll(workingExperiences);
-            menuRepository.save(new Menu(idCandidate, WORKING_EXP));
+            menuRepository.save(new Menu(idCandidate, WORKING_EXP, menuOrder));
         }
     }
 
-    private void saveOrUpdateQualification(long idCandidate, List<Qualification> qualifications) {
+    private void saveOrUpdateQualification(long idCandidate, List<Qualification> qualifications, int menuOrder) {
         deleteCandidateData(idCandidate, QUALIFICATION);
 
         if (qualifications != null && !qualifications.isEmpty()) {
@@ -111,11 +111,11 @@ public class ProfileManageService {
                 qualification.setIdCandidate(idCandidate);
             }
             qualificationRepository.saveAll(qualifications);
-            menuRepository.save(new Menu(idCandidate, QUALIFICATION));
+            menuRepository.save(new Menu(idCandidate, QUALIFICATION, menuOrder));
         }
     }
 
-    private List<String> saveOrUpdateProjects(long idCandidate, List<Project> projects) {
+    private List<String> saveOrUpdateProjects(long idCandidate, List<Project> projects, int menuOrder) {
         deleteCandidateData(idCandidate, PROJECT);
 
         if (projects != null && !projects.isEmpty()) {
@@ -123,14 +123,14 @@ public class ProfileManageService {
                 project.setIdCandidate(idCandidate);
             }
             projectRepository.saveAll(projects);
-            menuRepository.save(new Menu(idCandidate, PROJECT));
+            menuRepository.save(new Menu(idCandidate, PROJECT, menuOrder));
         }
 
         List<Project> allSavedProjects = projectRepository.getProjectsByIdCandidate(idCandidate);
         return allSavedProjects.stream().map(p -> p.getId() + ":" + p.getName()).collect(Collectors.toList());
     }
 
-    private void saveOrUpdateSkills(long idCandidate, List<Skill> skills) {
+    private void saveOrUpdateSkills(long idCandidate, List<Skill> skills, int menuOrder) {
         deleteCandidateData(idCandidate, SKILL);
 
         if (skills != null && !skills.isEmpty()) {
@@ -138,7 +138,7 @@ public class ProfileManageService {
                 skill.setIdCandidate(idCandidate);
             }
             skillRepository.saveAll(skills);
-            menuRepository.save(new Menu(idCandidate, SKILL));
+            menuRepository.save(new Menu(idCandidate, SKILL, menuOrder));
         }
     }
 
@@ -161,16 +161,16 @@ public class ProfileManageService {
         }
     }
 
-    private void saveOrUpdateAboutCandidate(long idCandidate, String about) {
+    private void saveOrUpdateAboutCandidate(long idCandidate, String about, int menuOrder) {
         deleteCandidateData(idCandidate, ABOUT_CANDIDATE);
 
         if (about != null) {
             aboutCandidateRepository.save(new AboutCandidate(idCandidate, about));
-            menuRepository.save(new Menu(idCandidate, ABOUT_CANDIDATE));
+            menuRepository.save(new Menu(idCandidate, ABOUT_CANDIDATE, menuOrder));
         }
     }
 
-    private void saveOrUpdateAchievements(long idCandidate, List<Achievement> achievements) {
+    private void saveOrUpdateAchievements(long idCandidate, List<Achievement> achievements, int menuOrder) {
         deleteCandidateData(idCandidate, ACHIEVEMENTS);
 
         if (achievements != null && !achievements.isEmpty()) {
@@ -178,7 +178,7 @@ public class ProfileManageService {
                 achievement.setIdCandidate(idCandidate);
             }
             achievementRepository.saveAll(achievements);
-            menuRepository.save(new Menu(idCandidate, ACHIEVEMENTS));
+            menuRepository.save(new Menu(idCandidate, ACHIEVEMENTS, menuOrder));
         }
     }
 

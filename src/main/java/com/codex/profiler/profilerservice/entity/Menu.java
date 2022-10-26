@@ -14,16 +14,19 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class Menu {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     @NotNull
     private long idCandidate;
     @NotNull
     private String title;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @NotNull
+    private int menuOrder;
 
-    public Menu(long idCandidate, String title) {
+    public Menu(long idCandidate, String title, int menuOrder) {
         this.idCandidate = idCandidate;
         this.title = title;
+        this.menuOrder = menuOrder;
     }
 }
