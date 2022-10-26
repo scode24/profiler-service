@@ -11,6 +11,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Base64;
 
 @Aspect
@@ -21,7 +23,7 @@ public class ProfilerServiceAspect {
     CandidateRepository candidateRepository;
 
     @Before(value = "execution(* com.codex.profiler.profilerservice.controller.ProfileController.saveOrUpdate*(..))")
-    public void checkUserAccess() throws InvalidInfoException {
+    public void checkUserAccess() throws InvalidInfoException, UnsupportedEncodingException {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String accessToken = request.getHeader("access-token");
 
@@ -30,7 +32,8 @@ public class ProfilerServiceAspect {
 
         String encodedToken = Base64.getEncoder().encodeToString(accessToken.getBytes());
         String email = request.getQueryString().trim().replace("email=", "");
-
+        email = URLDecoder.decode(email, "UTF-8");
+        
         Candidate candidate = candidateRepository.findByEmailAndToken(email, encodedToken);
 
         if (candidate == null)
