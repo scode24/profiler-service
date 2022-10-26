@@ -12,7 +12,6 @@ import java.util.List;
 
 @Component
 public class NoDetailsAccountRemovalScheduler {
-
     Logger logger = LoggerFactory.getLogger(NoDetailsAccountRemovalScheduler.class);
 
     @Autowired
