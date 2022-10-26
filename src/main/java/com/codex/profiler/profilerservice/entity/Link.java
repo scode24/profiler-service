@@ -19,6 +19,8 @@ public class Link {
     @NotNull
     private Long idCandidate;
     @NotNull
+    private String name;
+    @NotNull
     @NotBlank
     private String link;
 }

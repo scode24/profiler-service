@@ -8,6 +8,7 @@ import com.codex.profiler.profilerservice.model.ProjectData;
 import com.codex.profiler.profilerservice.model.ResponseModel;
 import com.codex.profiler.profilerservice.repository.CandidateRepository;
 import com.codex.profiler.profilerservice.service.ProfileManageService;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,22 +29,31 @@ public class ProfileController {
     @Autowired
     private CandidateRepository candidateRepository;
 
-    @ApiOperation(value = "Save/update profile information", notes = "Save/ update information. This is to be noted that about section can take max 2000 character, all other string parameters will take max 255 characters.")
+    @ApiOperation(value = "Save/update profile information", notes = "Save/update information. This is to be noted that About and Project Description section can take max 2000 character by default, all other string parameters will take max 255 characters" +
+            "This POST requires [access-token] to be provided in header." +
+            "[access-token] and [query-param] will be checked before processing.")
     @PostMapping("/saveOrUpdateProfile")
+    @ApiImplicitParam(name = "access-token", value = "access-token", required = true, allowEmptyValue = false, paramType = "header")
     public ResponseEntity<ResponseModel> saveOrUpdateProfile(@RequestParam String email, @RequestBody ProfileInfoModel profileInfoModel) throws IOException {
         List<String> info = profileManageService.processProfile(profileInfoModel, email);
         return new ResponseEntity<>(new ResponseModel("Profile data saved/ updated", "Project data : " + info), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Save/update profile image", notes = "Profile image save/ update information")
+    @ApiOperation(value = "Save/update profile image", notes = "Profile image save/ update information. " +
+            "This POST requires [access-token] to be provided in header." +
+            "[access-token] and [query-param] will be checked before processing.")
     @PostMapping("/saveOrUpdateProfileImage")
+    @ApiImplicitParam(name = "access-token", value = "access-token", required = true, allowEmptyValue = false, paramType = "header")
     public ResponseEntity<ResponseModel> saveOrUpdateProfileImage(@RequestParam String email, @RequestParam("image") MultipartFile imageFile) throws IOException {
         profileManageService.saveOrUpdateCandidateImage(email, imageFile.getBytes());
         return new ResponseEntity<>(new ResponseModel("Profile image saved/ updated", null), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Save/update project image", notes = "Project image save/ update information")
+    @ApiOperation(value = "Save/update project image", notes = "Project image save/ update information. " +
+            "This POST requires [access-token] to be provided in header." +
+            "[access-token] and [query-param] will be checked before processing.")
     @PostMapping("/saveOrUpdateProjectImage")
+    @ApiImplicitParam(name = "access-token", value = "access-token", required = true, allowEmptyValue = false, paramType = "header")
     public ResponseEntity<ResponseModel> saveOrUpdateProjectImage(@RequestParam String email, @RequestParam("idProject") long idProject, @RequestParam("image") MultipartFile imageFile) throws IOException {
         profileManageService.saveOrUpdateProjectImage(email, idProject, imageFile.getBytes());
         return new ResponseEntity<>(new ResponseModel("Project image saved/ updated", null), HttpStatus.OK);

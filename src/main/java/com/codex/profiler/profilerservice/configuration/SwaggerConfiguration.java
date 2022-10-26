@@ -16,6 +16,7 @@ public class SwaggerConfiguration {
 
     @Bean
     public Docket docket() {
+
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.codex.profiler.profilerservice"))
